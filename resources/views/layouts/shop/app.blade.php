@@ -8,18 +8,18 @@ $index_route = ['shop.home', 'shop.news', 'shop.info', 'shop.shopinfo', 'shop.gu
 <head>
   <meta charset="utf-8">
 
-  @if (!in_array($current_rname, $index_route, true))
+  {{-- @if (!in_array($current_rname, $index_route, true)) --}}
   <meta name="robots" content="noindex">
-  @endif
+  {{-- @endif --}}
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="receipt" content="{{ !session()->has('receipt.date') || !session()->has('receipt.time') ? 'on' : 'no' }}">
 
   @hasSection('page_title')
-  <title>@yield('page_title') | 【公式】{{ $meta_title }} | お持ち帰り・ジョイフルデリバリー注文サイト</title>
+  <title>@yield('page_title') | 【公式】{{ $meta_title }}</title>
   @else
-  <title>【公式】{{ $meta_title }} | お持ち帰り・ジョイフルデリバリー注文サイト</title>
+  <title>【公式】{{ $meta_title }}</title>
   @endif
 
   <meta name="description" content="{{ $meta_description }}">
@@ -111,7 +111,7 @@ $index_route = ['shop.home', 'shop.news', 'shop.info', 'shop.shopinfo', 'shop.gu
       <li>
         <a href="{{ route('shop.news', ['account' => $sub_domain]) }}">
           <i data-feather="info" class="d-inline-block align-middle text-primary mr-2"></i>
-          <span class="d-inline-block align-middle text-body">店舗からのお知らせ</span>
+          <span class="d-inline-block align-middle text-body">お知らせ</span>
         </a>
       </li>
       <li>
@@ -122,7 +122,7 @@ $index_route = ['shop.home', 'shop.news', 'shop.info', 'shop.shopinfo', 'shop.gu
       </li>
     </ul>
     <div class="spmenu-shop">
-      <div class="spmenu-shop-info">
+      {{-- <div class="spmenu-shop-info">
         <p class="name">{{ $manages->name }}</p>
         <p class="address">
           〒{{ $manages_shops->zipcode }}
@@ -131,13 +131,13 @@ $index_route = ['shop.home', 'shop.news', 'shop.info', 'shop.shopinfo', 'shop.gu
           {{ $manages_shops->address2 }}
         </p>
         <p class="mb-0 link"><a href="{{ route('shop.shoplist', ['account' => $sub_domain]) }}">店舗情報を見る</a></p>
-      </div>
+      </div> --}}
       <div class="spmenu-btns mt-3">
         @if ($manages_shops->googlemap_url != null)
-        <a class="btn btn-block btn-outline-light" href="{{ $manages_shops->googlemap_url }}">
+        {{-- <a class="btn btn-block btn-outline-light" href="{{ $manages_shops->googlemap_url }}">
           <i data-feather="map-pin" class="d-inline-block align-middle text-primary mr-1"></i>
           <span class="d-inline-block align-middle text-body small">Googlemapをみる</span>
-        </a>
+        </a> --}}
         @endif
         <a class="btn btn-block btn-outline-light mt-2" href="tel:{{ $manages->tel }}">
           <i data-feather="phone" class="d-inline-block align-middle text-primary mr-1"></i>
@@ -155,9 +155,14 @@ $index_route = ['shop.home', 'shop.news', 'shop.info', 'shop.shopinfo', 'shop.gu
   <footer id="footer">
     <div class="footer-logo">
       <div class="container">
+        @if ($manages->logo == null)
+        <a class="text-white font-weight-bold d-block py-2 h5"
+          href="{{ route('shop.home', ['account' => $sub_domain]) }}">{{ $manages->name }}</a>
+        @else
         <a class="d-block py-2" href="{{ route('shop.home', ['account' => $sub_domain]) }}">
-          <img alt="MALEBRANCHE 京都 北山" src="{{ asset('/images/foot_logo.png') }}" width="120">
+          <img src="{{ url($manages->logo) }}" alt="{{ $manages->name }}" style="height: 45px !important">
         </a>
+        @endif
       </div>
     </div>
     <div class="footer-menu py-4">
