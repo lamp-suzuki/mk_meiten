@@ -1,0 +1,156 @@
+.member {
+  &-info {
+    position: relative;
+    border: 1px solid $body-color;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    & > img {
+      z-index: 1;
+      position: absolute;
+      top: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.addressee {
+  &-list {
+    position: relative;
+    font-size: $font-size-sm;
+  }
+  &-item {
+    overflow: hidden;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: $light;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &.active {
+      background-color: rgba($primary, 0.2);
+      .addressee-head {
+        position: relative;
+        border-color: rgba($primary, 0.4);
+        &::after {
+          content: "メイン";
+          color: rgba($primary, 0.8);
+          display: inline-block;
+          font-size: 12px;
+          font-weight: bold;
+          position: absolute;
+          top: $font-size-sm;
+          right: $font-size-sm;
+        }
+      }
+    }
+  }
+  &-head {
+    padding: $font-size-sm;
+    border-bottom: 2px solid $secondary;
+  }
+  &-body {
+    padding: $font-size-sm;
+  }
+  &-edit {
+    display: flex;
+    .btn {
+      border-radius: 10rem;
+      font-size: 12px;
+      padding: 0.25rem 1rem;
+    }
+  }
+}
+
+.orders {
+  &-item {
+    position: relative;
+    @include media-breakpoint-up(md) {
+      background-color: $white;
+    }
+    &::after {
+      content: "";
+      display: block;
+      padding: .5rem 0;
+      background-color: $light;
+    }
+  }
+  &-head {
+    padding: 1rem;
+    border-top: 1px solid $secondary;
+    border-bottom: 1px solid $secondary;
+    table {
+      thead {
+        th {
+          color: #888888;
+          font-size: 12px;
+          padding: 0;
+          font-weight: normal;
+          &:last-child {
+            text-align: right;
+          }
+        }
+      }
+      tbody {
+        td {
+          padding: 0;
+          font-size: $font-size-sm;
+          &:last-child {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+  &-list {
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding: 1rem;
+    &-menu {
+      display: inline-block;
+      vertical-align: top;
+      white-space: normal;
+      width: 150px;
+      margin-right: 1rem;
+      .thumbnail {
+        overflow: hidden;
+        border-radius: 0.5rem;
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+      .name {
+        font-weight: bold;
+        margin: $font-size-sm 0;
+      }
+      .info {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        line-height: 1;
+        letter-spacing: normal;
+        .count {
+          font-size: 13px;
+          font-weight: bold;
+        }
+        .price {
+          font-size: 13px;
+          font-weight: bold;
+          color: $primary;
+          &::before {
+            content: "￥";
+            margin-right: 3px;
+            color: $body-color;
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
+  &-foot {
+    padding: 1rem;
+    border-top: 1px solid $secondary;
+    border-bottom: 1px solid $secondary;
+  }
+}

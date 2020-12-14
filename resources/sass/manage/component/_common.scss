@@ -1,0 +1,59 @@
+body {
+  font-feature-settings: "palt" 1;
+  letter-spacing: 0.06em;
+  padding-top: 65px;
+  @include media-breakpoint-down(md) {
+    padding-top: 52.78px;
+  }
+  &.open {
+    .orverray {
+      z-index: 11;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba($body-color, 0.4);
+    }
+  }
+}
+
+a {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: bottom;
+}
+
+.feather {
+  width: $font-size-base;
+  height: $font-size-base;
+  &-icon {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 19.5px;
+    text-align: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: $primary;
+    .feather {
+      stroke: $white;
+      fill: none;
+      width: $font-size-sm;
+      height: $font-size-sm;
+    }
+    & + * {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 5px;
+      color: $body-color;
+      line-height: 1;
+    }
+  }
+}

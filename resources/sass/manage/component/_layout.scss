@@ -1,0 +1,17 @@
+.wrap {
+  max-width: 980px;
+  min-height: 85vh;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}
+
+.d-lg-flex {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .content {
+    width: 48%;
+    @include media-breakpoint-down(md) {
+      width: 100%;
+    }
+  }
+}

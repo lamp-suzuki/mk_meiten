@@ -1,0 +1,28 @@
+.btn {
+  font-weight: bold;
+  &-light {
+    background-color: $white;
+    border-color: $secondary;
+    &:hover,
+    &:active {
+      background-color: $secondary;
+    }
+  }
+  & > .feather,
+  & > span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  & > .feather {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+}
+
+#navbar {
+  .btn {
+    font-weight: normal !important;
+    border: 0 !important;
+    line-height: 2;
+  }
+}

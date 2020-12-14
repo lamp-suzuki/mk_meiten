@@ -1,0 +1,115 @@
+::placeholder {
+  color: #888888 !important;
+}
+::-ms-input-placeholder {
+  color: #888888 !important;
+}
+:-ms-input-placeholder {
+  color: #888888 !important;
+}
+
+.form {
+  &-group {
+    margin-bottom: $font-size-base;
+    padding-bottom: $font-size-base;
+    border-bottom: 1px solid #e0e0e0;
+    label {
+      display: block;
+      color: #888888;
+    }
+  }
+  &-control {
+    border: 0;
+    &:not([type="search"]) {
+      font-size: 15px;
+      border-radius: 2px;
+      height: auto;
+      padding: 0.7rem;
+    }
+  }
+  &-check {
+    &:not(.no-bg) {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: nowrap;
+      background-color: $white;
+      padding: $font-size-sm;
+      margin-bottom: 3px;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &-input {
+      position: static;
+      margin: 0 0.5rem 0 0;
+    }
+  }
+  &-img {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    &-label {
+      overflow: hidden;
+      cursor: pointer;
+      width: 111px;
+      height: 111px;
+      background-image: url("../../../images/input_img.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center center;
+      margin-right: 5px;
+      @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+        background-image: url("../../../images/input_img@2x.png");
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    &-input {
+      display: none;
+    }
+    &-preview {
+      &:hover {
+        position: relative;
+        &::after {
+          z-index: 1;
+          display: block;
+          line-height: 1;
+          cursor: pointer;
+          position: absolute;
+          top: 5px;
+          left: 10px;
+          content: "×";
+          color: #888888;
+          font-size: 1.25rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  &-date {
+    display: none;
+    margin-top: 0.5rem;
+    border: 2px solid $secondary;
+    padding: 1rem;
+  }
+}
+
+.input {
+  &-group {
+    &-text {
+      border: 0;
+    }
+  }
+}
+
+.select2 {
+  &-selection {
+    &--multiple {
+      border: 0 !important;
+      padding: 0.25rem !important;
+      border-radius: 2px !important;
+    }
+  }
+}

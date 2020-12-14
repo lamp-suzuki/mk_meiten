@@ -1,0 +1,39 @@
+.fc {
+  th,
+  td {
+    a {
+      color: $body-color;
+    }
+    &.fc-day-sun {
+      a {
+        color: $danger;
+      }
+    }
+    &.fc-day-sat {
+      a {
+        color: $success;
+      }
+    }
+  }
+  &-h {
+    &-event {
+      background-color: transparent !important;
+      margin: 0 !important;
+      text-align: center !important;
+      border: 0 !important;
+      .fc-event-main {
+        color: $body-color !important;
+        font-size: 12px !important;
+        font-weight: normal !important;
+      }
+    }
+  }
+  .fc-daygrid-day-number {
+    font-size: $font-size-sm;
+  }
+  .fc-daygrid-body-unbalanced {
+    .fc-daygrid-day-events {
+      min-height: 1px !important;
+    }
+  }
+}

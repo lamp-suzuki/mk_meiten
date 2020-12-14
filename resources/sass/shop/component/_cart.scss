@@ -1,0 +1,158 @@
+.history-back {
+  background-color: $light;
+  padding: 0.5rem 0;
+  .container {
+    a {
+      display: block;
+      width: 100%;
+    }
+    svg,
+    span {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    span {
+      font-size: $font-size-sm;
+      color: $body-color;
+      margin-left: 5px;
+    }
+  }
+}
+.cart {
+  &-count {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: block;
+    width: auto;
+    height: 1rem;
+    padding: 0 5px;
+    color: $white;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1rem;
+    letter-spacing: normal;
+    background-color: $primary;
+    border-radius: 10rem;
+  }
+
+  // カートの中身
+  &__list {
+    ol {
+      display: block;
+      margin: 0;
+      padding: 0;
+      & > li {
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 2px solid $light;
+        .thumbnail {
+          overflow: hidden;
+          width: 30%;
+          img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+          }
+        }
+        .info {
+          width: 50%;
+          .name {
+            margin: 0;
+            font-weight: bold;
+            font-size: $font-size-sm;
+          }
+          .price {
+            margin: 5px 0;
+            font-size: 1rem;
+            color: $primary;
+            letter-spacing: normal;
+            font-weight: bold;
+            &::before {
+              content: "￥";
+              margin-right: 3px;
+              color: $body-color;
+              font-size: $font-size-sm;
+              font-weight: normal;
+            }
+          }
+          .options {
+            font-size: 12px;
+          }
+          .form-control {
+            font-size: 12px;
+          }
+        }
+        .delete {
+          width: 15%;
+          align-self: flex-end;
+          text-align: right;
+          .btn {
+            font-weight: normal;
+            font-size: 12px;
+            padding: 0.25rem 0.5rem;
+          }
+        }
+      }
+    }
+  }
+  &__amount {
+    .table {
+      font-size: $font-size-sm;
+      tbody {
+        tr {
+          th,
+          td {
+            font-weight: normal;
+            padding: 0.5rem 0;
+          }
+          td {
+            text-align: right;
+          }
+        }
+      }
+      tfoot {
+        tr {
+          th,
+          td {
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 1rem 0 0.5rem;
+            border-top: 1px solid $secondary;
+          }
+          td {
+            text-align: right;
+            color: $primary;
+          }
+          &.small {
+            th,
+            td {
+              font-size: 12px;
+              font-weight: normal;
+              border: 0;
+              color: $body-color;
+              padding-top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.okimochi-btns {
+  .btn-outline-secondary {
+    font-weight: normal !important;
+    &.active {
+      background-color: $primary !important;
+      color: $white !important;
+      border-color: $primary !important;
+    }
+  }
+}

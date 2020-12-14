@@ -1,0 +1,136 @@
+body {
+  font-family: "Lato", "Noto Sans JP", sans-serif;
+  font-feature-settings: "palt" 1;
+  letter-spacing: 0.06em;
+  @include media-breakpoint-up(md) {
+    padding-bottom: 0;
+    background-color: $light;
+  }
+  &.spopen {
+    .overray {
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba($body-color, 0.7);
+    }
+  }
+  &.home {
+    padding-bottom: 63px;
+  }
+  &:not(.home) {
+    #main {
+      & > *:not(.mv):not(.pc-two) {
+        @include media-breakpoint-up(md) {
+          max-width: 768px;
+          margin-right: auto;
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}
+
+p {
+  font-size: $font-size-sm;
+}
+
+a {
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.navi-link {
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+#main {
+  padding-top: 57px;
+}
+
+.home {
+  #main {
+    padding-top: 102px;
+  }
+}
+
+.home-slide-container {
+  padding: 0;
+  @include media-breakpoint-down(md) {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+.ttl {
+  &-horizon {
+    border-top: 1px solid $secondary;
+    border-bottom: 1px solid $secondary;
+    background-color: $light;
+    padding: 1em 0;
+    margin: 0 0 1.5rem;
+    font-size: $font-size-sm;
+    color: #666666;
+    line-height: 1;
+  }
+}
+
+.collapse {
+  &-wrap {
+    [data-toggle="collapse"] {
+      position: relative;
+      font-size: 1rem;
+      padding: 1rem 0;
+      .container {
+        position: relative;
+        .position-absolute {
+          top: 50%;
+          right: 1rem;
+          transform: translateY(-50%);
+        }
+      }
+    }
+    .collapse {
+      padding: 0 0 1rem;
+    }
+  }
+}
+
+.pc-two {
+  @include media-breakpoint-up(md) {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 980px;
+    margin: 0 auto 3rem;
+  }
+  & > div {
+    &:first-child {
+      @include media-breakpoint-up(md) {
+        width: 65%;
+      }
+    }
+    &:last-child {
+      @include media-breakpoint-up(md) {
+        width: 32.5%;
+      }
+    }
+    &>* {
+      @include media-breakpoint-up(md) {
+        background-color: $white;
+      }
+    }
+  }
+}

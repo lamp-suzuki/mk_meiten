@@ -1,0 +1,127 @@
+.item {
+  &-cats {
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding: 1rem 1rem 1rem 0;
+    margin: 1rem 0 0;
+    & > a {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 1rem;
+      padding: 0.5em 1em;
+      background-color: $white;
+      border-radius: 10rem;
+      color: $body-color;
+      font-weight: bold;
+      line-height: 1;
+      letter-spacing: normal;
+    }
+  }
+  &__list {
+    &-wrap {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid $secondary;
+    }
+    &-name {
+      overflow: hidden;
+      font-size: 1.125rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    &-table {
+      overflow: hidden;
+      border-radius: 0.5rem;
+      width: 100%;
+      background-color: $white;
+      border-collapse: collapse;
+      th,
+      td {
+        padding: 0.75em;
+        width: auto;
+        img {
+          width: 100px;
+          height: auto;
+        }
+      }
+      thead {
+        tr {
+          th {
+            border-bottom: 1px solid $secondary;
+            &.edit,
+            &.delete {
+              width: 4rem;
+            }
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            background-color: $white;
+            .price {
+              font-size: 1rem;
+              letter-spacing: normal;
+              &::before {
+                content: "￥";
+                font-size: $font-size-sm;
+                margin-right: 3px;
+              }
+            }
+            .edit,
+            .delete {
+              cursor: pointer;
+              border: none;
+              outline: none;
+              appearance: none;
+              display: inline-block;
+              vertical-align: middle;
+              width: 30px;
+              height: 30px;
+              line-height: 26px;
+              border-radius: 0.5rem;
+              text-align: center;
+              .feather {
+                stroke-width: 3px;
+                width: 1rem;
+                height: 1rem;
+              }
+            }
+            .edit {
+              background-color: #b4e2b1;
+              .feather {
+                stroke: #4cb944;
+              }
+            }
+            .delete {
+              background-color: #ffd0d5;
+              .feather {
+                stroke: $danger;
+              }
+            }
+            .draft,
+            .reserve {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba($body-color, 0.2);
+              color: $white;
+              text-align: center;
+            }
+          }
+          &:nth-child(2n) {
+            td {
+              background-color: #faf9f8;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ui-sortable-handle {
+  cursor: pointer;
+}

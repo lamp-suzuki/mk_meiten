@@ -1,0 +1,72 @@
+#sidebarMenu {
+  z-index: 1;
+  position: fixed;
+  top: 55.8px;
+  left: 0;
+  @include media-breakpoint-down(md) {
+    z-index: 999;
+    top: 0;
+    left: auto;
+    right: -75vw;
+    width: 75vw;
+    height: 100vh;
+    transition: all 0.3s;
+  }
+  &.open {
+    right: 0;
+  }
+  .head {
+    display: none;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: $font-size-base;
+    @include media-breakpoint-down(md) {
+      display: flex;
+    }
+    p {
+      margin: 0;
+      color: $dark;
+      span {
+        color: $body-color;
+      }
+    }
+    a {
+      color: $body-color;
+      text-decoration: underline;
+      font-size: 12px;
+    }
+  }
+  .foot {
+    display: block;
+    margin-top: 0.5rem;
+    a {
+      display: block;
+      padding: 0.25rem 1rem;
+      color: $body-color;
+      font-size: 12px;
+      .feather {
+        width: 12px;
+        height: 12px;
+        transform: rotate(90deg);
+      }
+    }
+  }
+  .nav-link {
+    position: relative;
+    display: block;
+    padding: $font-size-base;
+    border-top: 1px solid $secondary;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: $font-size-base;
+      transform: translateY(-50%) rotate(45deg);
+      display: block;
+      width: $font-size-sm * 0.5;
+      height: $font-size-sm * 0.5;
+      border-top: 1px solid $secondary;
+      border-right: 1px solid $secondary;
+    }
+  }
+}

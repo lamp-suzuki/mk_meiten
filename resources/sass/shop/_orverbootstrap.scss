@@ -1,0 +1,82 @@
+[data-toggle="modal"] {
+  cursor: pointer;
+}
+
+.btn {
+  font-size: $font-size-sm;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  &-step-back {
+    border: 2px solid $secondary;
+    border-radius: 10rem;
+    padding: 0.5rem 0.7rem;
+  }
+  &-decrement,
+  &-increment {
+    padding: 0.375rem 0.75rem !important;
+  }
+  &.rounded-pill {
+    min-width: 250px;
+  }
+  &-link {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  &-outline {
+    &-light {
+      border-width: 2px;
+    }
+  }
+  &-select {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 100%;
+    box-shadow: 0 3px 6px rgba($dark, 0.15);
+    border-radius: 20px;
+    .icon {
+      width: 52px;
+      height: 52px;
+      line-height: 52px;
+      text-align: center;
+      background-color: $white;
+      border-radius: 10rem;
+      font-size: 0;
+    }
+    .txt {
+      width: calc(100% - 52px - 1rem);
+      margin-left: 1rem;
+      text-align: left;
+      & > p {
+        margin: 0;
+        color: $white;
+        &.ttl {
+          font-weight: bold;
+          font-size: 1rem;
+          letter-spacing: 0.15em;
+        }
+        &.desc {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  &.position-relative {
+    & > .feather {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+.rounded {
+  border-radius: 10px !important;
+  &-bottom {
+    border-bottom-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+  }
+}

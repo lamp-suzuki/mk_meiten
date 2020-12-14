@@ -1,0 +1,21 @@
+#footer {
+  background-color: #4a4a4a;
+  color: $white;
+}
+
+.footer {
+  &-logo {
+    padding: 1rem 0;
+    border-bottom: 2px solid #5a5a5a;
+    a {
+      color: $white;
+    }
+  }
+  &-socket {
+    display: block;
+    line-height: 1;
+    color: #919191;
+    font-size: 12px;
+    padding: 0 1rem 1rem 1rem;
+  }
+}

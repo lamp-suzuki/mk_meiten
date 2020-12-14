@@ -1,0 +1,38 @@
+.single {
+  font-size: $font-size-sm;
+  line-height: 1.7;
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 2em 0 1em;
+    box-sizing: border-box;
+    padding-left: 0.5em;
+    border-left: 3px solid $primary;
+  }
+  h4 {
+    font-size: $font-size-sm;
+    font-weight: 700;
+    margin: 2em 0 1em;
+    box-sizing: border-box;
+  }
+  p {
+    line-height: 1.7;
+    margin-bottom: 1em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    td,
+    th {
+      font-size: $font-size-sm;
+      border: 1px solid $secondary;
+      padding: 1em;
+      font-weight: normal;
+      vertical-align: top;
+    }
+    th {
+      white-space: nowrap;
+      background-color: rgba($primary, 0.2);
+    }
+  }
+}

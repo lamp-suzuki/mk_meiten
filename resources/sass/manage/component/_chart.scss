@@ -1,0 +1,10 @@
+.chartjs {
+  &-render {
+    &-monitor {
+      overflow: hidden;
+      background-color: $light;
+      border-radius: 0.5rem;
+      padding: 1rem;
+    }
+  }
+}

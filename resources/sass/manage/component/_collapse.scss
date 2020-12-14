@@ -1,0 +1,26 @@
+.collapse {
+  &-ttl {
+    position: relative;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 1rem 0;
+    border-bottom: 1px solid $secondary;
+    &::after {
+      content: "▼";
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      display: block;
+      font-size: $font-size-sm;
+      transition: all 0.3s;
+    }
+    &[aria-expanded="true"] {
+      border-bottom: 0;
+      &::after {
+        transform: translateY(-50%) rotate(180deg);
+      }
+    }
+  }
+}

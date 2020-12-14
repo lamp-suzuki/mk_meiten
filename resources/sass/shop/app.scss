@@ -1,0 +1,12 @@
+@import "custom-colors";
+@import "custom-font-size";
+@import "~bootstrap/scss/bootstrap";
+@import "~slick-carousel/slick/slick.scss";
+@import "~slick-carousel/slick/slick-theme.scss";
+
+@import "~select2/src/scss/core.scss";
+@import "~@ttskch/select2-bootstrap4-theme/src/layout.scss";
+
+@import "./orverbootstrap";
+@import "./layout";
+@import "./component";

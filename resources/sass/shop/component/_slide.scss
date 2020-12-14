@@ -1,0 +1,35 @@
+.slick {
+  &-slider {
+    margin-bottom: 10px;
+    &.slick-dotted {
+      margin-bottom: 10px;
+    }
+  }
+  &-slide {
+    font-size: 0;
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0;
+    }
+  }
+  &-dots {
+    position: static;
+    line-height: 1;
+    font-size: 0;
+    margin-top: 10px;
+    & > li {
+      width: auto;
+      height: auto;
+      margin: 0;
+      &.slick-active {
+        button {
+          &::before {
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+}
