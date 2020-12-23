@@ -33,9 +33,6 @@
           <select class="form-control" id="pay" name="pay">
             <option value="">選択してください</option>
             <option value="0"@if(session('form_payment.pay')==='0') selected @endif>クレジットカード決済</option>
-            @if(session('receipt.service')!='takeout')
-            <option value="1"@if(session('form_payment.pay')==='1') selected @endif>店舗でお支払い</option>
-            @endif
           </select>
           <script type="text/javascript" src="https://checkout.pay.jp/" class="payjp-button"
             data-key="{{ config('app.payjpkey_public') }}" data-submit-text="適用して閉じる" data-partial="true"></script>

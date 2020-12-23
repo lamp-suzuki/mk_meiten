@@ -53,9 +53,11 @@ class ThanksController extends Controller
             if ($category->notice_email != null && $category->notice_email != '') {
                 $notice_email[] = $category->notice_email;
             }
+            // tell
             if ($category->notice_tel != null && $category->notice_tel != '') {
                 $notice_tel[] = $category->notice_tel;
             }
+            // Fax
             if ($category->notice_fax != null && $category->notice_fax != '') {
                 $notice_fax[] = $category->notice_fax;
             }
