@@ -87,7 +87,7 @@ $weeks = [
 
 <div class="collapse-wrap mt-4">
   <div class="collapse-ttl" data-toggle="collapse" href="#settingDelivery">デリバリー設定</div>
-  <div class="collapse" id="settingDelivery">
+  <div class="collapse show" id="settingDelivery">
     <form action="{{ route('manage.setting.service.delivery.update', ['account' => $sub_domain]) }}" method="POST">
       @csrf
       <div class="form-group">
