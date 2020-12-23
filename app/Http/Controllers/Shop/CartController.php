@@ -42,10 +42,10 @@ class CartController extends Controller
         $products = [];
         $products_stocks = [];
         $options = [];
+        $items_count = 0;
         // カート商品取得
         if (session('cart.products') !== null) {
             $cart_products = session('cart.products');
-            $items_count = 0;
             foreach (session('cart.products') as $index => $product) {
                 $items_count += (int)$product['quantity'];
                 // 設定在庫の取得

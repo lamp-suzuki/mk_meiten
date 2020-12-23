@@ -148,7 +148,6 @@ class DetailController extends Controller
             'payment_method' => $payment_method,
             'delivery_time' => $orders->delivery_time,
             'shipping' => $orders->shipping,
-            'tax' => $orders->tax,
             'total_amount' => $orders->total_amount,
         ];
         $manages = Auth::guard('manage')->user();
