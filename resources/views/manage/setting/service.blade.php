@@ -41,7 +41,7 @@ $weeks = [
 
 <div class="collapse-wrap mt-4 d-none">
   <div class="collapse-ttl" data-toggle="collapse" href="#settingTakeout">お持ち帰り設定</div>
-  <div class="collapse" id="settingTakeout">
+  <div class="collapse show" id="settingTakeout">
     <form action="{{ route('manage.setting.service.takeout.update', ['account' => $sub_domain]) }}" method="POST">
       @csrf
       <div class="form-group">
@@ -256,7 +256,7 @@ $weeks = [
   </div>
 </div>
 
-<div class="collapse-wrap mt-4">
+<div class="collapse-wrap mt-4 d-none">
   <div class="collapse-ttl" data-toggle="collapse" href="#settingEC">通販設定</div>
   <div class="collapse" id="settingEC">
     <form action="{{ route('manage.setting.service.ec.update', ['account' => $sub_domain]) }}" method="POST">
