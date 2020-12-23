@@ -123,7 +123,7 @@ $weeks = [
           </div>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group d-none">
         <label for="">キャンセルについて</label>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="cancelDelivery" value="0" id="cancelDeliveryFalse"
@@ -234,14 +234,14 @@ $weeks = [
         </div>
         @endforeach
       </div>
-      <div class="form-group">
+      <div class="form-group d-none">
         <label for="delivery_area">
           デリバリーエリア詳細
           <span class="badge badge-warning text-white ml-1">必須</span>
         </label>
         <textarea class="form-control" id="delivery_area" name="delivery_area" cols="30" rows="5">{!! $manage->delivery_area !!}</textarea>
       </div>
-      <div class="form-group">
+      <div class="form-group d-none">
         <label for="">キャンセル受付時間</label>
         <div class="form-inline">
           <span>お受取り時間の</span>
