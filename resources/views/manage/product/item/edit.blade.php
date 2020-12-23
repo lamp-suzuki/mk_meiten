@@ -109,9 +109,9 @@
   </div>
   <div class="form-group">
     <label for="">画像（変更がある場合のみアップロード）</label>
-    <input type="file" class="form-control-file" name="thumbnail_1" id="thumbnail_1">
-    <input type="file" class="form-control-file mt-2" name="thumbnail_2" id="thumbnail_2">
-    <input type="file" class="form-control-file mt-2" name="thumbnail_3" id="thumbnail_3">
+    <input type="file" accept=".jpg, .jpeg, .png, .gif" class="form-control-file" name="thumbnail_1" id="thumbnail_1">
+    <input type="file" accept=".jpg, .jpeg, .png, .gif" class="form-control-file mt-2" name="thumbnail_2" id="thumbnail_2">
+    <input type="file" accept=".jpg, .jpeg, .png, .gif" class="form-control-file mt-2" name="thumbnail_3" id="thumbnail_3">
     <small class="form-text text-muted d-block">
       ※3枚まで追加できます。
       <br />
@@ -127,15 +127,15 @@
         @if($menu->takeout_flag != null) checked @endif />
       <label class="form-check-label text-body" for="takeout_flag">お持ち帰り</label>
     </div>
-    <div class="form-check d-none">
+    <div class="form-check">
       <input class="form-check-input" type="checkbox" value="1" name="delivery_flag" id="delivery_flag"
         @if($menu->delivery_flag != null) checked @endif />
       <label class="form-check-label text-body" for="delivery_flag">デリバリー</label>
     </div>
-    <div class="form-check">
+    <div class="form-check d-none">
       <input class="form-check-input" type="checkbox" value="1" name="ec_flag" id="ec_flag" @if($menu->ec_flag != null)
       checked @endif />
-      <label class="form-check-label text-body" for="ec_flag">デリバリー</label>
+      <label class="form-check-label text-body" for="ec_flag">通販</label>
     </div>
   </div>
   <div class="form-group">

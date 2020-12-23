@@ -89,20 +89,9 @@
   </div>
   <div class="form-group">
     <label for="">画像</label>
-    <input type="file" class="form-control-file" name="thumbnail_1" id="thumbnail_1">
-    <input type="file" class="form-control-file mt-2" name="thumbnail_2" id="thumbnail_2">
-    <input type="file" class="form-control-file mt-2" name="thumbnail_3" id="thumbnail_3">
-    {{-- <div class="form-img">
-      <label class="form-img-label" for="thumbnail_1">
-        <input type="file" name="thumbnail_1" accept=".jpg, .jpeg, .png, .gif" class="form-img-input" id="thumbnail_1" />
-      </label>
-      <label class="form-img-label" for="thumbnail_2">
-        <input type="file" name="thumbnail_2" accept=".jpg, .jpeg, .png, .gif" class="form-img-input" id="thumbnail_2" />
-      </label>
-      <label class="form-img-label" for="thumbnail_3">
-        <input type="file" name="thumbnail_3" accept=".jpg, .jpeg, .png, .gif" class="form-img-input" id="thumbnail_3" />
-      </label>
-    </div> --}}
+    <input type="file" accept=".jpg, .jpeg, .png, .gif" class="form-control-file" name="thumbnail_1" id="thumbnail_1">
+    <input type="file" accept=".jpg, .jpeg, .png, .gif" class="form-control-file mt-2" name="thumbnail_2" id="thumbnail_2">
+    <input type="file" accept=".jpg, .jpeg, .png, .gif" class="form-control-file mt-2" name="thumbnail_3" id="thumbnail_3">
     <small class="form-text text-muted d-block">
       ※3枚まで追加できます。
       <br />
@@ -117,13 +106,13 @@
       <input class="form-check-input" type="checkbox" value="1" name="takeout_flag" id="takeout_flag" checked />
       <label class="form-check-label text-body" for="takeout_flag">お持ち帰り</label>
     </div>
-    <div class="form-check d-none">
+    <div class="form-check">
       <input class="form-check-input" type="checkbox" value="1" name="delivery_flag" id="delivery_flag" />
       <label class="form-check-label text-body" for="delivery_flag">デリバリー</label>
     </div>
-    <div class="form-check">
+    <div class="form-check d-none">
       <input class="form-check-input" type="checkbox" value="1" name="ec_flag" id="ec_flag" />
-      <label class="form-check-label text-body" for="ec_flag">デリバリー</label>
+      <label class="form-check-label text-body" for="ec_flag">通販</label>
     </div>
   </div>
   <div class="form-group">
