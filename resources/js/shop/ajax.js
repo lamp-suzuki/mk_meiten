@@ -70,24 +70,18 @@ $("#changeReceive").on("change", function() {
 
 // 店舗選択
 $("#deliveryShop, #changeDeliveryShop").on("change", function() {
-  if ($(this).val() != "" && $(this).val() != null) {
+  if ($(this).val() != '' && $(this).val() != null) {
     setSelectShop($(this).val());
   }
 });
 $('#step2 button[name="next"]').on("click", function() {
   getBusinessTime($("#deliveryDate").val());
-  getService();
-});
-$("#FirstSelect").on("show.bs.modal", function(e) {
-  getBusinessTime($("#deliveryDate").val());
-  getService();
 });
 
 // 受け取り時間選択
 $("#deliveryDate, #changedeliveryDate").on("change", function() {
   getBusinessTime($(this).val());
 });
-
 $("#nextstep3").on("click", function() {
   setSelectTime($("#deliveryDate").val(), $("#delivery_time").val());
 });
@@ -124,14 +118,8 @@ function setSelectService(val) {
     type: "POST",
     data: { service: val },
     success: function(service) {
-      $("#deliveryShop").val("");
       if (service != "takeout") {
-        let date =
-          new Date().getFullYear() +
-          "-" +
-          (new Date().getMonth() + 1) +
-          "-" +
-          new Date().getDate();
+        let date = (new Date).getFullYear() + '-' + ((new Date).getMonth() + 1) + '-' + (new Date).getDate();
         $("#step2").removeClass("show active");
         $("#step3").addClass("show active");
         getBusinessTime(date);
@@ -163,61 +151,6 @@ function setSelectShop(id) {
   });
 }
 
-// お受け取り店舗のセッション保存
-function getService() {
-  $.ajax({
-    headers: {
-      "X-CSRF-TOKEN": csrf
-    },
-    url: "/get-service",
-    type: "POST",
-    success: function(r) {
-      if (r == "takeout") {
-        $("#deliveryDate option").remove();
-        var start = new Date("12/18/2020");
-        var end = new Date("12/24/2020");
-        var loop = new Date(start);
-        var temp_num = 0;
-        while (loop <= end) {
-          var newDate = loop.setDate(loop.getDate() + 1);
-          loop = new Date(newDate);
-          $("#deliveryDate").append(
-            '<option value="' +
-              formatDate(loop) +
-              '">' +
-              formatDateJp(loop) +
-              "</option>"
-          );
-          if (temp_num == 0) {
-            getBusinessTime(formatDate(loop));
-          }
-          ++temp_num;
-        }
-      } else {
-        $("#deliveryDate option").remove();
-        var start = new Date();
-        for (let index = 0; index < 14; index++) {
-          var newDate = start.setDate(start.getDate() + index);
-          loop = new Date(newDate);
-          $("#deliveryDate").append(
-            '<option value="' +
-              formatDate(loop) +
-              '">' +
-              formatDateJp(loop) +
-              "</option>"
-          );
-          if (temp_num == 0) {
-            getBusinessTime(formatDate(loop));
-          }
-        }
-      }
-    },
-    error: function(e) {
-      console.log(e);
-    }
-  });
-}
-
 // 営業時間取得
 function getBusinessTime(date) {
   $.ajax({
@@ -231,44 +164,29 @@ function getBusinessTime(date) {
     },
     success: function(result) {
       if (result["service_flag"]) {
-        $("#deliveryDate>option, #changedeliveryDate>option").prop(
-          "disabled",
-          false
-        );
+        $('#deliveryDate>option, #changedeliveryDate>option').prop('disabled', false);
         $("#delivery_time, #changedeliveryTime")
           .children("option")
           .remove();
         $("#delivery_time, #changedeliveryTime").append(result["time"]);
-        if (
-          result["time"] == '<option value="">ご注文受け付け時間外です</option>'
-        ) {
+        if (result["time"] == '<option value="">ご注文受け付け時間外です</option>') {
           $("#nextstep3, #changeReceiptBtn").attr("disabled", true);
         } else {
           $("#nextstep3, #changeReceiptBtn").attr("disabled", false);
         }
       } else {
         let min_days = result["min_days"];
-        $("#nextstep3, #changeReceiptBtn").attr("disabled", false);
         $("#delivery_time, #changedeliveryTime")
           .children("option")
           .remove();
         $("#delivery_time, #changedeliveryTime").append(result["time"]);
-        $("#deliveryDate>option, #changedeliveryDate>option").each(function(
-          index,
-          el
-        ) {
-          if (result["taget_date"] == $(this).val()) {
-            $(this).prop("selected", true);
+        $('#deliveryDate>option, #changedeliveryDate>option').each(function(index, el) {
+          if (index < min_days) {
+            $(this).prop('disabled', true);
+          } else {
+            $(this).prop('selected', true);
             return false;
           }
-          // if (index < min_days) {
-          //   $(this).prop("disabled", true);
-          // } else {
-          //   if (result["taget_date"] == $(this).val()) {
-          //     $(this).prop("selected", true);
-          //     return false;
-          //   }
-          // }
         });
       }
     },

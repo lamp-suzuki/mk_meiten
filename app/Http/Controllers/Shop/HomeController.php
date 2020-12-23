@@ -27,9 +27,7 @@ class HomeController extends Controller
     public function index($account, Request $request)
     {
         $request->session()->put('receipt.service', 'delivery');
-
-        $sub_domain = $account;
-        $manages = DB::table('manages')->where('domain', $sub_domain)->first();
+        $manages = DB::table('manages')->where('domain', $account)->first();
         $shops = DB::table('shops')->where('manages_id', $manages->id)->get();
         $slides = DB::table('slides')->where('manages_id', $manages->id)->first();
         $categories = DB::table('categories')->where('manages_id', $manages->id)->orderBy('sort_id', 'asc')->get();
@@ -166,23 +164,16 @@ class HomeController extends Controller
         $service = session('receipt.service');
         $inputs_week = date('w', strtotime($request['date']));
         $inputs_date = date('Y-m-d', strtotime($request['date']));
-        $sub_domain = $account;
+        $manages = DB::table('manages')->where('domain', $account)->first();
 
         if ($service == 'takeout') { // テイクアウト時
             $shop = DB::table('shops')->find(session('receipt.shop_id'));
             $preparation = $shop->takeout_preparation;
             $business_time = $shop->{$service.'_'.$week_str[$inputs_week]}; // 営業時間
         } elseif ($service == 'delivery') { // デリバリー時
-            $sub_domain = $account;
-            $manages = DB::table('manages')->where('domain', $sub_domain)->first();
             $preparation = $manages->delivery_preparation;
             $business_time = $manages->{$service.'_'.$week_str[$inputs_week]}; // 営業時間
         } else { // EC時
-            $url = $_SERVER['HTTP_HOST'];
-            $domain_array = explode('.', $url);
-            $sub_domain = $domain_array[0];
-            $inputs_date = date('Y-m-d');
-            $manages = DB::table('manages')->where('domain', $sub_domain)->first();
             $ec_min_days = $manages->ec_min_days;
             $ec_delivery_time = explode("\n", $manages->ec_delivery_time); // 配送時間
         }
