@@ -70,18 +70,24 @@ $("#changeReceive").on("change", function() {
 
 // 店舗選択
 $("#deliveryShop, #changeDeliveryShop").on("change", function() {
-  if ($(this).val() != '' && $(this).val() != null) {
+  if ($(this).val() != "" && $(this).val() != null) {
     setSelectShop($(this).val());
   }
 });
 $('#step2 button[name="next"]').on("click", function() {
   getBusinessTime($("#deliveryDate").val());
+  getService();
+});
+$("#FirstSelect").on("show.bs.modal", function(e) {
+  getBusinessTime($("#deliveryDate").val());
+  getService();
 });
 
 // 受け取り時間選択
 $("#deliveryDate, #changedeliveryDate").on("change", function() {
   getBusinessTime($(this).val());
 });
+
 $("#nextstep3").on("click", function() {
   setSelectTime($("#deliveryDate").val(), $("#delivery_time").val());
 });
