@@ -163,10 +163,10 @@
               <td>¥ {{ number_format(session('cart.amount')) }}</td>
             </tr>
             @if (session('receipt.service')!='takeout')
-            <tr>
+            {{-- <tr>
               <th>送料</th>
               <td>¥ {{ number_format(session('cart.shipping')) }}</td>
-            </tr>
+            </tr> --}}
             @endif
           </tbody>
           <tfoot>

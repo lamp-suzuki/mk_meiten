@@ -100,7 +100,7 @@
         <div class="form-group">
           <div class="form-check form-check-inline d-inline-flex">
             <input class="form-check-input" type="radio" name="delivery_place" id="delivery_home" value="0" checked>
-            <label class="form-check-label text-body" for="delivery_home">ご自宅用</label>
+            <label class="form-check-label text-body" for="delivery_home">ご自宅用・お届け先</label>
           </div>
           {{-- <div class="form-check form-check-inline d-inline-flex">
             <input class="form-check-input" type="radio" name="delivery_place" id="delivery_gift" value="1">

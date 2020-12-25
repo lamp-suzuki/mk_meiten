@@ -12,6 +12,11 @@
   <div class="container">
     <h2 class="h5 font-weight-bold">{{ $news->title }}</h2>
     <p class="text-muted small">{{ date('Y.m.d', strtotime($news->updated_at)) }}</p>
+    @if($news->thumbnail != null && $news->thumbnail != '')
+    <figure class="text-center my-3">
+      <img src="{{ url($news->thumbnail) }}" alt="{{ $news->title }}">
+    </figure>
+    @endif
     <p>{!! nl2br(e($news->content)) !!}</p>
     <div class="mt-4 text-center">
       <a class="btn btn-primary rounded-pill" href="{{ route('shop.news', ['account' => $sub_domain]) }}">一覧に戻る</a>
