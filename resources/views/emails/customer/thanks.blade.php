@@ -13,9 +13,6 @@
 [注文者様名] {{ $user['name'] }} 様
 [注文者様名（フリガナ）] {{ $user['furigana'] }}
 [メールアドレス] {{ $user['email'] }}
-@if ($user['birth_day'])
-[生年月日] {{ $user['birth_day'] }}
-@endif
 @if(isset($user['zipcode']) && $user['zipcode'] != null && $user['zipcode'] != '')
 [ご住所] 〒{{ $user['zipcode'] }}
 {{ $user['address1'] }}{{ $user['address2'] }}
