@@ -128,7 +128,7 @@ if (session('receipt.service') == 'takeout') {
             </div>
             <div class="catalog-btn">
               @if (isset($stocks[$product->id]) && $stocks[$product->id] <= 0)
-              <button class="btn btn-block btn-dark" type="button">お電話にて承り中</button>
+              <button class="btn btn-block btn-dark" type="button">売り切れ</button>
               @else
               <button class="btn btn-block btn-primary" type="button" data-toggle="modal"
                 data-target="#modal-item{{ $product->id }}">数量・オプションを選ぶ</button>
