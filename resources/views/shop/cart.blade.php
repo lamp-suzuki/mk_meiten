@@ -40,14 +40,6 @@
           </button>
         </div>
         @endif
-        @if (!is_array(session('cart.products')) || $items_count < 2)
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <span>商品が2個以上でないとご注文できません。</span>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        @endif
         @if ($errors->any())
         <div class="alert alert-danger fade show" role="alert">
           未入力または入力に誤りがござます。
@@ -182,7 +174,7 @@
       <div class="container">
         <div class="d-flex justify-content-center form-btns">
           <a class="btn btn-lg bg-white btn-back mr-2" href="{{ route('shop.home', ['account' => $sub_domain]) }}">戻る</a>
-          <button class="btn btn-lg btn-primary" type="submit"@if (session()->has('cart.vali') || $items_count < 2) disabled @endif>注文へ進む</button>
+          <button class="btn btn-lg btn-primary" type="submit"@if (session()->has('cart.vali')) disabled @endif>注文へ進む</button>
         </div>
       </div>
     </div>
