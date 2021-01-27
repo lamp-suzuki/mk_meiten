@@ -85,6 +85,9 @@ if (session('receipt.service') == 'takeout') {
       <div id="cat{{ $cat->id }}" class="catalog-wrap @if(count($products[$cat->id]) == 0) d-none @endif">
         <h2>{{ $cat->name }}</h2>
         <div class="catalog-list">
+          @php
+          $counts = 0;
+          @endphp
           @foreach ($products[$cat->id] as $product)
           @php
           // {{-- 除外店舗処理 --}}
@@ -237,7 +240,13 @@ if (session('receipt.service') == 'takeout') {
               </div>
             </div>
           </div>
+          @php
+          ++$counts;
+          @endphp
           @endforeach
+          @if ($counts == 0)
+          <p>選択された日時に、注文可能な商品がございません。</p>
+          @endif
         </div>
       </div>
       @endif
