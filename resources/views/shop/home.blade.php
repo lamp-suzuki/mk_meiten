@@ -10,7 +10,7 @@ if (session('receipt.service') == 'takeout') {
 } elseif (session('receipt.service') == 'delivery') {
     $service = 'デリバリー';
 } else {
-    $service = 'デリバリー';
+    $service = '通販';
 }
 @endphp
 <div id="changeDateBtn">
@@ -21,7 +21,7 @@ if (session('receipt.service') == 'takeout') {
     @if (session('receipt.date') !== null)
     <span class="date">{{ date('n月j日', strtotime(session('receipt.date'))).' '.session('receipt.time') }}</span>
     @endif
-    @if (session('receipt.shop_name') !== null && session('receipt.service') == 'takeout')
+    @if (session('receipt.shop_name') !== null)
     <span class="shop">{{ session('receipt.shop_name') }}</span>
     @endif
     <div class="link" style="cursor: pointer">変更</div>
@@ -57,15 +57,13 @@ if (session('receipt.service') == 'takeout') {
 @endif
 
 {{-- お知らせ --}}
-@if (count($posts) > 0)
+@if (isset($posts->title))
 <div class="news bg-light py-3">
   <div class="container px-md-0">
-    @foreach ($posts as $index => $post)
-    <a class="text-body d-block bg-white small px-3 py-2 @if(count($posts) != ($index+1)) mb-2 @endif" href="{{ route('shop.info', ['account' => $sub_domain, 'id' => $post->id]) }}">
-      <span class="d-block text-secondary">{{ date('Y/m/d', strtotime($post->updated_at)) }}</span>
-      <span class="d-block">{{ $post->title }}</span>
+    <a class="text-body d-block bg-white small p-3" href="{{ route('shop.info', ['account' => $sub_domain, 'id' => $posts->id]) }}">
+      <span class="d-block text-secondary">{{ date('Y/m/d', strtotime($posts->updated_at)) }}</span>
+      <span class="d-block">{{ $posts->title }}</span>
     </a>
-    @endforeach
   </div>
 </div>
 @endif
@@ -73,29 +71,23 @@ if (session('receipt.service') == 'takeout') {
 {{-- 商品一覧 --}}
 <section id="catalog" class="catalog">
   <ul class="catalog-cat">
-    <li><a class="active smooth" href="#catalog">すべて</a></li>
+    {{-- <li><a class="active smooth" href="#catalog">すべて</a></li> --}}
     @foreach ($categories as $cat)
-    @if (isset($products[$cat->id]) && count($products[$cat->id]) > 0)
-    <li><a class="smooth" href="#cat{{ $cat->id }}">{{ $cat->name }} ({{ count($products[$cat->id]) }})</a></li>
+    @if (isset($products[$cat->id]))
+    <li class="@if(count($products[$cat->id]) == 0) d-none @endif"><a class="smooth" href="#cat{{ $cat->id }}">{{ $cat->name }} ({{ count($products[$cat->id]) }})</a></li>
     @endif
     @endforeach
   </ul>
   <div class="py-4">
     <div class="container">
-      @php
-      $sale_flag = 0;
-      @endphp
       @foreach ($categories as $cat)
-      @if (isset($products[$cat->id]) && count($products[$cat->id]) > 0)
-      @php
-      $sale_flag++;
-      @endphp
-      <div id="cat{{ $cat->id }}" class="catalog-wrap">
+      @if (isset($products[$cat->id]))
+      <div id="cat{{ $cat->id }}" class="catalog-wrap @if(count($products[$cat->id]) == 0) d-none @endif">
         <h2>{{ $cat->name }}</h2>
         <div class="catalog-list">
           @foreach ($products[$cat->id] as $product)
-          {{-- 除外店舗処理 --}}
           @php
+          // {{-- 除外店舗処理 --}}
           $only_shops = explode(',', $product->shops_id);
           array_pop($only_shops);
           if (session('receipt.shop_id') != null) {
@@ -103,14 +95,11 @@ if (session('receipt.service') == 'takeout') {
                   continue;
               }
           }
-          @endphp
-          {{-- 公開予約処理 --}}
-          @php
-          if ($product->release_start != null && $product->release_end != null && session('receipt.date') != null) {
-              $target_date = strtotime(session('receipt.date'));
-              if (strtotime($product->release_start) > $target_date || $target_date > strtotime($product->release_end)) {
-                  continue;
-              }
+          // {{-- 個別リードタイムスキップ --}}
+          if ((session('receipt.date') != null && session('receipt.time') != null) && session('receipt.service') != 'ec') {
+            if (strtotime(session('receipt.date').' '.session('receipt.time')) <= strtotime(date('Y-m-d H:i:s', strtotime('+'.$product->lead_time.' minutes')))) {
+              continue;
+            }
           }
           @endphp
           <div class="catalog-item">
@@ -120,12 +109,13 @@ if (session('receipt.service') == 'takeout') {
             </div>
             @endif
             <div class="catalog-name">
-              <span>{{ $product->name }}</span>
+              <span>{{ mb_strimwidth($product->name, 0, 50, '…') }}</span>
             </div>
             <div class="catalog-price">
               <span class="catalog-price-num">{{ number_format($product->price) }}</span>
               <span class="catalog-price-tax">（税込）</span>
             </div>
+            @if (session()->has('receipt.date') && session()->has('receipt.time'))
             <div class="catalog-btn">
               @if (isset($stocks[$product->id]) && $stocks[$product->id] <= 0)
               <button class="btn btn-block btn-dark" type="button">売り切れ</button>
@@ -134,6 +124,7 @@ if (session('receipt.service') == 'takeout') {
                 data-target="#modal-item{{ $product->id }}">数量・オプションを選ぶ</button>
               @endif
             </div>
+            @endif
             {{-- modal --}}
             <div class="modal catalog-modal fade" id="modal-item{{ $product->id }}" tabindex="-1"
               aria-labelledby="modal-item{{ $product->id }}Label" aria-hidden="true">
@@ -193,7 +184,7 @@ if (session('receipt.service') == 'takeout') {
                     <div class="modal-body">
                       <div class="p-3">
                         <h3 class="title">{{ $product->name }}</h3>
-                        <p>{{ $product->explanation }}</p>
+                        <p>{!! nl2br($product->explanation) !!}</p>
                         <div class="price">
                           <span class="price-num">{{ number_format($product->price) }}</span>
                           <span class="price-tax">（税込）</span>
@@ -218,7 +209,7 @@ if (session('receipt.service') == 'takeout') {
                             id="product{{ $product->id }}_opt{{ $opt->id }}" />
                           <label class="form-check-label" for="product{{ $product->id }}_opt{{ $opt->id }}">
                             <span>{{ $opt->name }}</span>
-                            <span class="yen">{{ number_format($opt->price) }}</span>
+                            <span class="yen">@if($opt->price>=0)+@endif{{ number_format($opt->price) }}</span>
                           </label>
                         </div>
                         @endif
@@ -227,7 +218,7 @@ if (session('receipt.service') == 'takeout') {
                       @endif
                       @if (isset($stocks[$product->id]) && $stocks[$product->id] > 0 && $stop_flag === false)
                       <div class="number">
-                        <input class="num-spinner" type="number" name="quantity" value="1" min="1" max="{{ $stocks[$product->id] < 50 ? $stocks[$product->id] : 50 }}" step="1" />
+                        <input class="num-spinner" type="number" name="quantity" value="1" min="1" max="50" step="1" />
                       </div>
                       @endif
                     </div>
@@ -251,9 +242,6 @@ if (session('receipt.service') == 'takeout') {
       </div>
       @endif
       @endforeach
-      @if($sale_flag === 0)
-      <p>現在、注文できる商品がありません。</p>
-      @endif
     </div>
   </div>
 </section>

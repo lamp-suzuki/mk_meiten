@@ -27,53 +27,55 @@ class HomeController extends Controller
     public function index($account, Request $request)
     {
         $request->session()->put('receipt.service', 'delivery');
+
         $manages = DB::table('manages')->where('domain', $account)->first();
         $shops = DB::table('shops')->where('manages_id', $manages->id)->get();
         $slides = DB::table('slides')->where('manages_id', $manages->id)->first();
         $categories = DB::table('categories')->where('manages_id', $manages->id)->orderBy('sort_id', 'asc')->get();
-        $posts = DB::table('posts')->where('manages_id', $manages->id)->limit(3)->get();
+        $posts = DB::table('posts')
+            ->where('manages_id', $manages->id)
+            ->whereDate('created_at', '<=', date('Y-m-d'))
+            ->orderBy('created_at', 'desc')
+            ->first();
 
         // 念のため削除
         if (session('cart.products') == null || count(session('cart.products')) <= 0) {
             session()->forget('cart');
         }
 
+        /* 商品情報取得 */
         $options = [];
         $products = [];
-        foreach ($categories as $key => $cat) {
+        foreach ($categories as $cat) {
             // オプション
             if (DB::table('options')->where('categories_id', $cat->id)->exists()) {
                 $options[$cat->id] = DB::table('options')->where('categories_id', $cat->id)->get();
             }
             // 商品
             if (DB::table('products')->where('categories_id', $cat->id)->exists()) {
-                if (session('receipt.service') == 'takeout') { // テイクアウトのみ
-                    $products[$cat->id] = DB::table('products')->where([
-                        ['categories_id', $cat->id],
-                        ['takeout_flag', 1],
-                    ])
-                    ->whereIn('status', ['public', 'reserve'])
-                    ->orderBy('sort_id', 'asc')->get();
-                } elseif (session('receipt.service') == 'delivery') { // デリバリーのみ
-                    $products[$cat->id] = DB::table('products')->where([
-                        ['categories_id', $cat->id],
-                        ['delivery_flag', 1],
-                    ])
-                    ->whereIn('status', ['public', 'reserve'])
-                    ->orderBy('sort_id', 'asc')->get();
-                } elseif (session('receipt.service') == 'ec') { // お取り寄せのみ
-                    $products[$cat->id] = DB::table('products')->where([
-                        ['categories_id', $cat->id],
-                        ['ec_flag', 1],
-                    ])
-                    ->whereIn('status', ['public', 'reserve'])
-                    ->orderBy('sort_id', 'asc')->get();
-                } else { // 全て
-                    $products[$cat->id] = DB::table('products')
+                $products[$cat->id] = DB::table('products')
                     ->where('categories_id', $cat->id)
-                    ->whereIn('status', ['public', 'reserve'])
-                    ->orderBy('sort_id', 'asc')->get();
+                    ->whereIn('status', ['public', 'reserve']);
+                if (session('receipt.date') != null) {
+                    $products[$cat->id]->where(function ($query) {
+                        $query->orWhere([
+                                ['release_start', null],
+                                ['release_end', null]
+                            ])
+                            ->orWhere([
+                                ['release_start', '<=', session('receipt.date')],
+                                ['release_end', '>=', session('receipt.date')]
+                            ]);
+                    });
                 }
+                if (session('receipt.service') == 'takeout') { // テイクアウトのみ
+                    $products[$cat->id]->where('takeout_flag', 1);
+                } elseif (session('receipt.service') == 'delivery') { // デリバリーのみ
+                    $products[$cat->id]->where('delivery_flag', 1);
+                } elseif (session('receipt.service') == 'ec') { // お取り寄せのみ
+                    $products[$cat->id]->where('ec_flag', 1);
+                }
+                $products[$cat->id] = $products[$cat->id]->orderBy('sort_id', 'asc')->get();
             }
         }
 
@@ -81,10 +83,10 @@ class HomeController extends Controller
         $stocks = [];
         if (session('receipt.date') != null) {
             $receipt_date = session('receipt.date');
-            foreach ($products as $key => $product) {
-                foreach ($product as $key => $item) {
+            foreach ($products as $product) {
+                foreach ($product as $item) {
                     // 設定在庫の取得
-                    if (DB::table('stocks')->where('products_id', $item->id)->where('date', $receipt_date)->exists()) {
+                    if (DB::table('stocks')->where(['products_id'=>$item->id, 'date'=>$receipt_date])->exists()) {
                         $now_stock = DB::table('stocks')->where(['products_id'=>$item->id, 'date'=>$receipt_date])->first()->stock;
                     } else {
                         $now_stock = DB::table('products')->find($item->id)->stock;
@@ -123,27 +125,13 @@ class HomeController extends Controller
     public function set_service(Request $request)
     {
         $request->session()->put('receipt.service', $request['service']);
-        try {
-            $request->session()->forget('receipt.shop_id');
-            $request->session()->forget('receipt.shop_name');
-            $request->session()->forget('receipt.date');
-            $request->session()->forget('receipt.time');
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
         return $request['service'];
     }
 
-    // 受け取り方法わたし
+    // 受け取り方法リセット
     public function reset_session()
     {
         session()->forget('receipt');
-    }
-
-    // 受け取り方法わたし
-    public function get_service()
-    {
-        return session('receipt.service');
     }
 
     // 受け取り店舗保存
@@ -160,11 +148,11 @@ class HomeController extends Controller
     public function get_business_time($account, Request $request)
     {
         $week_str = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+        $manages = DB::table('manages')->where('domain', $account)->first();
 
         $service = session('receipt.service');
-        $inputs_week = date('w', strtotime($request['date']));
         $inputs_date = date('Y-m-d', strtotime($request['date']));
-        $manages = DB::table('manages')->where('domain', $account)->first();
+        $inputs_week = date('w', strtotime($inputs_date));
 
         if ($service == 'takeout') { // テイクアウト時
             $shop = DB::table('shops')->find(session('receipt.shop_id'));
@@ -181,68 +169,56 @@ class HomeController extends Controller
         $opt_html = ""; // option HTML
         if ($service != 'ec') { // デリバリーとテイクアウト
             if ($business_time != null) {
-                $business_time_start = explode(',', $business_time)[0]; // 開始時間
-                $business_time_end = explode(',', $business_time)[1]; // 終了時間
-                for ($i = explode(':', $business_time_start)[0]; $i <= explode(':', $business_time_end)[0]; $i++) {
-                    for ($j = 0; $j <= 45; $j+=15) {
-                        if ($inputs_date == date('Y-m-d')) {
-                            if (strtotime(date('Y-m-d H:i', strtotime("+".$preparation." minute"))) > strtotime($inputs_date.' '.$i.':'.$j) || strtotime($business_time_start) > strtotime($i.':'.$j)) {
-                                continue;
-                            } else {
-                                if (strtotime($business_time_end) < strtotime($i.':'.$j) || strtotime($business_time_start) > strtotime($i.':'.$j)) {
-                                    continue;
-                                } else {
-                                    $opt_html .= '<option value="'.date('H:i', strtotime($i.':'.$j)).'">'.date('H:i', strtotime($i.':'.$j)).'</option>';
-                                }
-                            }
-                        } else {
-                            if (strtotime($business_time_end) < strtotime($i.':'.$j) || strtotime($business_time_start) > strtotime($i.':'.$j)) {
-                                continue;
-                            } else {
-                                $opt_html .= '<option value="'.date('H:i', strtotime($i.':'.$j)).'">'.date('H:i', strtotime($i.':'.$j)).'</option>';
-                            }
-                        }
+                // 受け渡し時間が日をまたいで無い時
+                if (strtotime(date('Y-m-d', strtotime('+'.$preparation.' minute'))) <= strtotime($inputs_date.' 00:00:00')) {
+                    $time_schedule = [];
+                    $business_time_arr = explode(',', $business_time);
+                    if ((isset($business_time_arr[0]) && $business_time_arr[0] != '') && (isset($business_time_arr[1]) && $business_time_arr[1] != '')) {
+                        $time_schedule[] = [$business_time_arr[0], $business_time_arr[1]];
                     }
-                }
-                $business_time_start = explode(',', $business_time)[2]; // 開始時間
-                $business_time_end = explode(',', $business_time)[3]; // 終了時間
-                for ($i = explode(':', $business_time_start)[0]; $i <= explode(':', $business_time_end)[0]; $i++) {
-                    for ($j = 0; $j <= 45; $j+=15) {
-                        if ($inputs_date == date('Y-m-d')) {
-                            if (strtotime(date('Y-m-d H:i', strtotime("+".$preparation." minute"))) > strtotime($inputs_date.' '.$i.':'.$j) || strtotime($business_time_start) > strtotime($i.':'.$j)) {
-                                continue;
-                            } else {
-                                if (strtotime($business_time_end) < strtotime($i.':'.$j) || strtotime($business_time_start) > strtotime($i.':'.$j)) {
+                    if ((isset($business_time_arr[2]) && $business_time_arr[2] != '') && (isset($business_time_arr[3]) && $business_time_arr[3] != '')) {
+                        $time_schedule[] = [$business_time_arr[2], $business_time_arr[3]];
+                    }
+                    foreach ($time_schedule as $index => $val) {
+                        // 正しく入力されていない場合はスキップ
+                        if (!isset(explode(':', $val[0])[0]) || !isset(explode(':', $val[0])[1])) {
+                            continue;
+                        }
+                        if ($val[0] === $val[1]) {
+                            continue;
+                        }
+                        // 営業時間HTML生成
+                        for ($i = explode(':', $val[0])[0]; $i <= explode(':', $val[1])[0]; $i++) {
+                            for ($j = 0; $j <= 45; $j+=15) {
+                                // 営業時間外の時
+                                if ((strtotime($inputs_date.' '.$i.':'.$j) < strtotime($inputs_date.' '.$val[0])) || (strtotime($inputs_date.' '.$i.':'.$j) > strtotime($inputs_date.' '.$val[1]))) {
                                     continue;
-                                } else {
-                                    $opt_html .= '<option value="'.date('H:i', strtotime($i.':'.$j)).'">'.date('H:i', strtotime($i.':'.$j)).'</option>';
                                 }
-                            }
-                        } else {
-                            if (strtotime($business_time_end) < strtotime($i.':'.$j) || strtotime($business_time_start) > strtotime($i.':'.$j)) {
-                                continue;
-                            } else {
-                                $opt_html .= '<option value="'.date('H:i', strtotime($i.':'.$j)).'">'.date('H:i', strtotime($i.':'.$j)).'</option>';
+                                // お受け取り時間前
+                                if ($preparation % 1440 != 0) {
+                                    if (strtotime("+".$preparation." minute") > strtotime($inputs_date.' '.$i.':'.$j)) {
+                                        continue;
+                                    }
+                                }
+
+                                $opt_html .= '<option value="'.date('H:i', strtotime($i.':'.$j)).'">'.date('H:i', strtotime($i.':'.$j)).'</option>'."\n";
                             }
                         }
                     }
                 }
             }
+
             if ($opt_html === '') {
                 $opt_html = '<option value="">ご注文受け付け時間外です</option>';
             }
             return ["service_flag" => true, "time" => $opt_html];
-        } else { // EC時
-            foreach ($ec_delivery_time as $key => $val) {
+
+        // EC時
+        } else {
+            foreach ($ec_delivery_time as $val) {
                 $opt_html .= '<option value="'.$val.'">'.$val.'</option>';
             }
-            $min_date = date('Y-m-d', strtotime('+'.$ec_min_days.' days'));
-            if (strtotime($request['date']) >= strtotime($min_date)) {
-                $taget_date = $request['date'];
-            } else {
-                $taget_date = $min_date;
-            }
-            return ["service_flag" => false, "time" => $opt_html, "min_days" => $ec_min_days, 'taget_date' => $taget_date];
+            return ["service_flag" => false, "time" => $opt_html, "min_days" => $ec_min_days, 'inputs_date' => $inputs_date];
         }
     }
 
@@ -257,16 +233,10 @@ class HomeController extends Controller
     public function change_receipt($account, Request $request)
     {
         $request->session()->put('receipt.service', $request['service']);
+        $request->session()->put('receipt.shop_id', explode(':', $request['delivery_shop'])[0]);
+        $request->session()->put('receipt.shop_name', explode(':', $request['delivery_shop'])[1]);
         $request->session()->put('receipt.date', $request['delivery_date']);
         $request->session()->put('receipt.time', $request['delivery_time']);
-
-        if ($request['delivery_shop'] == '店舗を選択' || $request['delivery_shop'] == null || $request['delivery_shop'] == '') {
-            $request->session()->put('receipt.shop_id', null);
-            $request->session()->put('receipt.shop_name', null);
-        } else {
-            $request->session()->put('receipt.shop_id', explode(':', $request['delivery_shop'])[0]);
-            $request->session()->put('receipt.shop_name', explode(':', $request['delivery_shop'])[1]);
-        }
 
         return redirect()->route('shop.home', ['account' => $account]);
     }
@@ -291,7 +261,7 @@ class HomeController extends Controller
 
         $price = $product->price;
         if (is_array($request['options'])) {
-            foreach ($request['options'] as $key => $option) {
+            foreach ($request['options'] as $option) {
                 $opt_temp = DB::table('options')->find($option);
                 $price += $opt_temp->price;
             }
