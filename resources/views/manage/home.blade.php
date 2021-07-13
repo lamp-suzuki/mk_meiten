@@ -12,7 +12,7 @@
     </div>
     <div class="content-body">
       @php
-      $url = 'https://system.take-eats.jp/wp-json/wp/v2/systeminfo?per_page=1';
+      $url = 'https://take-eats.jp/wp-json/wp/v2/systeminfo?per_page=1';
       $json = mb_convert_encoding(file_get_contents($url), 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
       $arr = json_decode($json,true)[0];
       $title = $arr['title']['rendered'];
